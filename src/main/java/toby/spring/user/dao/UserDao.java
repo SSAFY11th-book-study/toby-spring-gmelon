@@ -7,12 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import toby.spring.user.domain.User;
 
-public abstract class UserDao {
+public class UserDao {
 
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+    private SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDao() {
+        this.simpleConnectionMaker = new SimpleConnectionMaker();
+    }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new DUserDao();
+        UserDao dao = new UserDao();
 
         User user = new User();
         user.setId("gmelon");
@@ -31,7 +35,7 @@ public abstract class UserDao {
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "insert into users(id, name, password) values (?, ?, ?)");
@@ -46,7 +50,7 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "select * from users where id = ?");
