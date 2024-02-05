@@ -5,7 +5,7 @@ import toby.spring.user.domain.User;
 
 public class UserDaoTest {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao(new DConnectionMaker());
+        UserDao dao = new DaoFactory().userDao();
 
         User user = new User();
         user.setId("gmelon");
