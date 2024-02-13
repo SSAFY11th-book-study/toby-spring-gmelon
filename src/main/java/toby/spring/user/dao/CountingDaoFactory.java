@@ -6,24 +6,19 @@ import toby.spring.account.dao.AccountDao;
 import toby.spring.message.dao.MessageDao;
 
 @Configuration
-public class DaoFactory {
+public class CountingDaoFactory {
     @Bean
     public UserDao userDao() {
         return new UserDao(connectionMaker());
     }
 
-    public AccountDao accountDao() {
-        ConnectionMaker connectionMaker = connectionMaker();
-        return new AccountDao(connectionMaker);
-    }
-
-    public MessageDao messageDao() {
-        ConnectionMaker connectionMaker = connectionMaker();
-        return new MessageDao(connectionMaker);
+    @Bean
+    public ConnectionMaker connectionMaker() {
+        return new CountingConnectionMaker(realConnectionMaker());
     }
 
     @Bean
-    public ConnectionMaker connectionMaker() {
+    public ConnectionMaker realConnectionMaker() {
         return new DConnectionMaker();
     }
 }
