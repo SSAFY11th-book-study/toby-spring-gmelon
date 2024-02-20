@@ -16,12 +16,16 @@ public class UserDaoTest {
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         UserDao dao = context.getBean("userDao", UserDao.class);
 
+        dao.deleteAll();
+        assertThat(dao.getCount(), is(0));
+
         User user = new User();
         user.setId("gmelon");
         user.setName("현상혁");
         user.setPassword("single");
 
         dao.add(user);
+        assertThat(dao.getCount(), is(1));
 
         System.out.println(user.getId() + " 등록 성공");
 
